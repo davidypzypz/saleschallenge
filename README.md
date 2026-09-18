@@ -127,20 +127,21 @@ día.
   `CHAR_ALIASES` dentro de `site/js/app.js`.
 - **Colores / escenas del mapa**: cambia directamente las imágenes en
   `site/img/backgrounds/` (mismo nombre de archivo) para actualizar una
-  escena sin tocar código. La de Mordor es un SVG propio (no había una
-  imagen de referencia limpia sin marca de agua para esa escena — ver nota
-  abajo).
+  escena sin tocar código.
+- **Antorchas**: cada personaje enciende su propia antorcha según qué tan
+  lejos va en SU avance (no según lo que estés viendo tú al hacer scroll),
+  para que no se pierdan como manchas negras en las escenas oscuras. Los
+  umbrales (`TORCH_START` / `TORCH_FULL`) y el largo de cada escena
+  (`LENGTH_MULT`) están al inicio de `site/js/app.js`.
 - **Peso de las métricas**: si más adelante quieres, por ejemplo, que la
   meta pese más que los hábitos, se ajusta la fórmula de
   `Avance_Combinado` en la pestaña Resumen (hoy es un promedio simple).
 
-> **Nota sobre la imagen de Mordor**: la referencia que compartiste para esa
-> escena (el póster con la Torre del Ojo) tiene una marca de agua de autor
-> incrustada en la propia imagen, así que no la usé directamente — recreé
-> una escena original inspirada en su composición (torre, montañas, brillo
-> de lava). Si compras/licencias el archivo limpio del artista, puedes
-> reemplazar `site/img/backgrounds/mordor.svg` por esa imagen sin tocar
-> nada más.
+> **Nota sobre la imagen de Mordor**: el primer póster que compartiste para
+> esa escena (el de la Torre del Ojo en tono morado) traía una marca de
+> agua incrustada en la propia pintura, así que no la usé — la segunda
+> referencia que mandaste (`site/img/backgrounds/mordor.jpg`, estilo plano
+> con el sol detrás de la montaña) está limpia y es la que quedó en el mapa.
 
 ---
 
