@@ -114,17 +114,33 @@ día.
 
 ## Personalizar
 
+- **El mapa hace scroll cinematográfico**: las 4 escenas (Shire, Lago,
+  Dragones, Mordor) son imágenes reales (`site/img/backgrounds/`) que se
+  van disolviendo una en la otra conforme avanzas el scroll horizontal —
+  el sol/luna de cada foto se funde con el de la siguiente, dando la
+  sensación de que el día avanza. Esa lógica de crossfade vive en
+  `updateScene()` dentro de `site/js/app.js`.
 - **Personajes**: los 6 disponibles (Mago, Hobbit, Guerrero, Arquero, Enano,
-  Explorador) están definidos como siluetas SVG en `site/index.html`
-  (`<symbol id="char-...">`). Puedes agregar más copiando ese patrón y
-  sumando el alias correspondiente en `CHAR_ALIASES` dentro de
-  `site/js/app.js`.
-- **Colores / escenas del mapa**: cada tramo (Shire, Lago, Dragones, Mordor)
-  es un grupo `<g>` independiente dentro del mismo SVG en `index.html` —
-  se pueden ajustar colores, montañas, etc. sin tocar la lógica.
+  Explorador) son siluetas recortadas de tu imagen de referencia, en
+  `site/img/characters/*.png`. Para agregar uno nuevo: exporta una silueta
+  PNG con fondo transparente a esa carpeta y suma su alias en
+  `CHAR_ALIASES` dentro de `site/js/app.js`.
+- **Colores / escenas del mapa**: cambia directamente las imágenes en
+  `site/img/backgrounds/` (mismo nombre de archivo) para actualizar una
+  escena sin tocar código. La de Mordor es un SVG propio (no había una
+  imagen de referencia limpia sin marca de agua para esa escena — ver nota
+  abajo).
 - **Peso de las métricas**: si más adelante quieres, por ejemplo, que la
   meta pese más que los hábitos, se ajusta la fórmula de
   `Avance_Combinado` en la pestaña Resumen (hoy es un promedio simple).
+
+> **Nota sobre la imagen de Mordor**: la referencia que compartiste para esa
+> escena (el póster con la Torre del Ojo) tiene una marca de agua de autor
+> incrustada en la propia imagen, así que no la usé directamente — recreé
+> una escena original inspirada en su composición (torre, montañas, brillo
+> de lava). Si compras/licencias el archivo limpio del artista, puedes
+> reemplazar `site/img/backgrounds/mordor.svg` por esa imagen sin tocar
+> nada más.
 
 ---
 

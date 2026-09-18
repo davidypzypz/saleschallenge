@@ -1,0 +1,21 @@
+<svg viewBox="0 0 1800 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradSkyMordor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7a2420"/>
+      <stop offset="100%" stop-color="#120a0b"/>
+    </linearGradient>
+    <filter id="blurSoft" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+  <rect x="0" y="0" width="1800" height="620" fill="url(#gradSkyMordor)"/>
+  <path d="M0,470 L160,380 L305,460 L470,340 L650,460 L830,300 L935,460 L1115,380 L1295,460 L1475,400 L1620,460 L1800,420 L1800,620 L0,620 Z" fill="#180a0b"/>
+  <circle cx="1010" cy="330" r="90" fill="#ff6a2e" opacity="0.35" filter="url(#blurSoft)"/>
+  <path d="M845,470 L1010,300 L1170,470 Z" fill="#0f0708"/>
+  <path d="M980,470 L1010,400 L1045,470 Z" fill="#ff7a33"/>
+  <rect x="1465" y="230" width="61" height="240" fill="#0c0506"/>
+  <path d="M1440,230 L1495,180 L1550,230 Z" fill="#0c0506"/>
+  <ellipse cx="1495" cy="205" rx="42" ry="30" fill="#ff5a2e" opacity="0.4" filter="url(#blurSoft)"/>
+  <ellipse cx="1495" cy="205" rx="14" ry="8" fill="#ffb347"/>
+  <path d="M0,560 C450,530 810,570 1170,540 C1440,520 1620,555 1800,540 L1800,1000 L0,1000 Z" fill="#0e0709"/>
+</svg>
