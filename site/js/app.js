@@ -3,6 +3,7 @@
 
   var CFG = window.CHALLENGE_CONFIG || {};
   var SCENES = 4; // Shire, Lake, Dragons, Mordor
+  var LENGTH_MULT = 1.7; // how many container-widths of scroll each scene spans
 
   var CHAR_ALIASES = {
     mago: "mago", wizard: "mago",
@@ -12,6 +13,22 @@
     enano: "enano", dwarf: "enano",
     explorador: "explorador", ranger: "explorador",
   };
+
+  // width/height ratio of each sprite file, so characters keep their real proportions.
+  var CHAR_ASPECT = {
+    guerrero: 108 / 119,
+    hobbit: 51 / 44,
+    enano: 45 / 47,
+    arquero: 66 / 88,
+    explorador: 62 / 54,
+    mago: 96 / 97,
+  };
+
+  // Torch glow: how deep into the journey (0..3, same scale as scenePos) a
+  // character must be before their own torch starts catching light, and
+  // fully lit. It's driven by each character's fixed progress, not scroll.
+  var TORCH_START = 1.65;
+  var TORCH_FULL = 2.7;
 
   var DEMO_DATA = [
     { vendedor: "Vendedor 1", personaje: "hobbit", avance: 0.36, rol: "" },
@@ -122,7 +139,7 @@
   function layout(records) {
     var containerW = els.mapScroll.clientWidth;
     var containerH = els.mapScroll.clientHeight;
-    var trackW = Math.round(containerW * SCENES);
+    var trackW = Math.round(containerW * SCENES * LENGTH_MULT);
 
     els.scrollTrack.style.width = trackW + "px";
     els.bgStage.style.width = containerW + "px";
@@ -134,6 +151,7 @@
 
     pathD = buildPathD(trackW, containerH);
     els.path.setAttribute("d", pathD);
+    els.pathShadow.setAttribute("d", pathD);
 
     renderTokens(records, trackW, containerH);
     updateScene();
@@ -174,29 +192,50 @@
       (buckets[key] = buckets[key] || []).push(rec);
     });
 
-    var charH = Math.max(46, Math.min(96, containerH * 0.16));
+    var charH = Math.max(28, Math.min(56, containerH * 0.09));
 
     Object.keys(buckets).forEach(function (key) {
       var group = buckets[key];
       group.forEach(function (rec, i) {
         var lengthAt = Math.max(2, Math.min(total - 2, rec.avance * total));
         var pt = path.getPointAtLength(lengthAt);
-        var spread = (i - (group.length - 1) / 2) * (charH * 0.7);
+        var spread = (i - (group.length - 1) / 2) * (charH * 0.9);
 
         var g = svgEl("g", { class: "token", transform: "translate(" + (pt.x + spread) + "," + pt.y + ")" });
 
         var shadow = svgEl("ellipse", { cx: 0, cy: charH * 0.06, rx: charH * 0.34, ry: charH * 0.09, fill: "rgba(0,0,0,0.4)" });
         g.appendChild(shadow);
 
-        // character aspect ratios vary per sprite; use a fixed height and natural width via CSS-less trick:
-        // we approximate width as 0.62*height (typical), the browser will letterbox slightly if off.
-        var charW = charH * 0.62;
+        var spriteId = charSpriteId(rec.personaje);
+        var charW = charH * (CHAR_ASPECT[spriteId] || 0.9);
+
+        // Torch glow: how far into the dark half of the journey this character
+        // already is, based on their own progress (not the viewer's scroll).
+        var ownScenePos = rec.avance * (SCENES - 1);
+        var torch = Math.max(0, Math.min(1, (ownScenePos - TORCH_START) / (TORCH_FULL - TORCH_START)));
+        if (torch > 0.03) {
+          var glowR = charH * (0.55 + 0.55 * torch);
+          var glow = svgEl("circle", {
+            cx: charW * 0.28, cy: -charH * 0.62, r: glowR,
+            fill: "url(#torchGlow)", opacity: torch,
+          });
+          g.appendChild(glow);
+        }
+
         var img = svgEl("image", {
           x: -charW / 2, y: -charH, width: charW, height: charH,
           preserveAspectRatio: "xMidYMax meet",
         });
-        img.setAttributeNS("http://www.w3.org/1999/xlink", "href", "img/characters/" + charSpriteId(rec.personaje) + ".png");
+        img.setAttributeNS("http://www.w3.org/1999/xlink", "href", "img/characters/" + spriteId + ".png");
         g.appendChild(img);
+
+        if (torch > 0.03) {
+          var flame = svgEl("circle", {
+            cx: charW * 0.32, cy: -charH * 0.64, r: charH * 0.09 * (0.6 + 0.4 * torch),
+            fill: "#ffdca0", opacity: Math.min(1, torch * 1.3),
+          });
+          g.appendChild(flame);
+        }
 
         var badgeSize = charH * 0.46;
         if (rec.rol && /llave/i.test(rec.rol)) {
@@ -297,6 +336,7 @@
     els.bgLayers = Array.prototype.slice.call(els.bgStage.querySelectorAll(".bg-layer"));
     els.journeySvg = document.getElementById("journeySvg");
     els.path = document.getElementById("journey-path");
+    els.pathShadow = document.getElementById("journey-path-shadow");
     els.tokensLayer = document.getElementById("tokens-layer");
     els.board = document.getElementById("board-list");
     els.legendScenes = Array.prototype.slice.call(document.querySelectorAll(".legend-scene"));

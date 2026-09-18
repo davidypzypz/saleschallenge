@@ -32,10 +32,21 @@
         <img class="bg-layer" data-scene="0" src="img/backgrounds/shire.jpg" alt="" draggable="false">
         <img class="bg-layer" data-scene="1" src="img/backgrounds/lake.jpg" alt="" draggable="false">
         <img class="bg-layer" data-scene="2" src="img/backgrounds/dragons.jpg" alt="" draggable="false">
-        <img class="bg-layer" data-scene="3" src="img/backgrounds/mordor.svg" alt="" draggable="false">
+        <img class="bg-layer" data-scene="3" src="img/backgrounds/mordor.jpg" alt="" draggable="false">
       </div>
       <svg class="journey-svg" id="journeySvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <path id="journey-path" fill="none" stroke="#f4efe4" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 16" opacity="0.8"/>
+        <defs>
+          <radialGradient id="torchGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffe3ad" stop-opacity="0.95"/>
+            <stop offset="45%" stop-color="#ffb347" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#ffb347" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="pathBlur" x="-20%" y="-200%" width="140%" height="500%">
+            <feGaussianBlur stdDeviation="2.2"/>
+          </filter>
+        </defs>
+        <path id="journey-path-shadow" fill="none" stroke="#1a1712" stroke-width="7" stroke-linecap="round" opacity="0.18" filter="url(#pathBlur)"/>
+        <path id="journey-path" fill="none" stroke="#e9dcb8" stroke-width="2.5" stroke-linecap="round" opacity="0.4" filter="url(#pathBlur)"/>
         <g id="tokens-layer"></g>
       </svg>
     </div>
